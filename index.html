@@ -140,22 +140,27 @@
     <div class="estimate">
       <h2>REQUEST A FREE ESTIMATE</h2>
       <p>Fill out the form and we'll get back to you quickly!</p>
-      <form action="#" method="POST">
+      <form id="estimateForm" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="a14c31a3-d372-4066-a594-c4b5799fc153">
+        <input type="hidden" name="subject" value="New estimate request — Proven Garage Doors">
+        <input type="hidden" name="from_name" value="Proven Garage Doors Website">
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none">
         <div class="form-grid">
           <input type="text" name="name" placeholder="Your Name *" autocomplete="name" required>
           <input type="tel" name="phone" placeholder="Phone *" autocomplete="tel" inputmode="tel" required>
           <input type="email" name="email" placeholder="Email (optional)" autocomplete="email">
           <select name="problem" required>
             <option value="" disabled selected>Problem *</option>
-            <option value="door-wont-open">Door won’t open</option>
-            <option value="broken-spring">Broken spring</option>
-            <option value="damaged-door">Damaged door</option>
-            <option value="broken-cable">Broken cable</option>
-            <option value="motor-not-working">Motor / opener not working</option>
+            <option value="Door won’t open">Door won’t open</option>
+            <option value="Broken spring">Broken spring</option>
+            <option value="Damaged door">Damaged door</option>
+            <option value="Broken cable">Broken cable</option>
+            <option value="Motor / opener not working">Motor / opener not working</option>
           </select>
           <textarea class="full" name="comments" placeholder="Comments (optional)"></textarea>
           <button class="btn btn-send full" type="submit">SEND REQUEST</button>
         </div>
+        <p id="formStatus" style="display:none;margin-top:14px;font-weight:700;"></p>
       </form>
     </div>
   </section>
@@ -238,6 +243,39 @@
     const nav = document.getElementById('nav');
     if (toggle && nav) {
       toggle.addEventListener('click', () => nav.classList.toggle('open'));
+    }
+
+    const form = document.getElementById('estimateForm');
+    const statusEl = document.getElementById('formStatus');
+    if (form && statusEl) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        statusEl.style.display = 'block';
+        statusEl.style.color = '#0b1d36';
+        statusEl.textContent = 'Sending…';
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: new FormData(form)
+          });
+          const data = await res.json();
+          if (data.success) {
+            form.reset();
+            statusEl.style.color = '#0b1d36';
+            statusEl.textContent = 'Thank you. We received your request and will call you shortly.';
+          } else {
+            statusEl.style.color = '#7a1f1f';
+            statusEl.textContent = data.message || 'Could not send. Please call or email us.';
+          }
+        } catch (err) {
+          statusEl.style.color = '#7a1f1f';
+          statusEl.textContent = 'Network error. Please try again or email info@provengaragedoor.com';
+        } finally {
+          btn.disabled = false;
+        }
+      });
     }
   </script>
 </body>
