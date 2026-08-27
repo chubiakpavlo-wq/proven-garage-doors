@@ -146,23 +146,18 @@
       <p>Fill out the form and we'll get back to you quickly!</p>
       <form action="#" method="POST">
         <div class="form-grid">
-          <input type="text" name="name" placeholder="Your Name" required>
-          <select name="service" required>
-            <option value="">Service Needed</option>
-            <option>Repair</option>
-            <option>Installation</option>
-            <option>Opener</option>
-            <option>Maintenance</option>
+          <input type="text" name="name" placeholder="Your Name *" autocomplete="name" required>
+          <input type="tel" name="phone" placeholder="Phone *" autocomplete="tel" inputmode="tel" required>
+          <input type="email" name="email" placeholder="Email (optional)" autocomplete="email">
+          <select name="problem" required>
+            <option value="" disabled selected>Problem *</option>
+            <option value="door-wont-open">Door won’t open</option>
+            <option value="broken-spring">Broken spring</option>
+            <option value="damaged-door">Damaged door</option>
+            <option value="broken-cable">Broken cable</option>
+            <option value="motor-not-working">Motor / opener not working</option>
           </select>
-          <input type="email" name="email" placeholder="Email Address" required>
-          <select name="service2">
-            <option value="">Select a Service</option>
-            <option>Broken Spring</option>
-            <option>New Door</option>
-            <option>Opener Repair</option>
-            <option>Other</option>
-          </select>
-          <textarea class="full" name="message" placeholder="Message (optional)"></textarea>
+          <textarea class="full" name="comments" placeholder="Comments (optional)"></textarea>
           <button class="btn btn-send full" type="submit">SEND REQUEST</button>
         </div>
       </form>
